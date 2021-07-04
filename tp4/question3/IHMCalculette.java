@@ -20,7 +20,6 @@ public class IHMCalculette extends JFrame {
         pack();
         setLocation(200,200);
         setVisible(true);
-
     }
 
     public static void main(String[] args){

@@ -8,24 +8,25 @@ public class PileModele<T> extends  java.util.Observable implements PileI<T> {
 
     private PileI<T> pile;
 
-    /* à compléter */
-
     public PileModele(PileI<T> pile) {
         this.pile = pile;
     }
 
     public void empiler(T o) throws PilePleineException {
-      pile.empiler(o);
-      setChanged();
-      notifyObservers(o);
+        pile.empiler(o);
+        setChanged();
+        notifyObservers(o);
     }
 
     public T depiler() throws PileVideException {
-        return null;
+        T res = pile.depiler();
+        setChanged();
+        notifyObservers(res);
+        return res;
     }
 
     public T sommet() throws PileVideException {
-        return null;
+        return pile.sommet();
     }
 
     public int taille() {

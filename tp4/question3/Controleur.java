@@ -37,28 +37,96 @@ public class Controleur extends JPanel {
         donnee.addActionListener(null /* null est à remplacer */);
         JPanel boutons = new JPanel();
         boutons.setLayout(new FlowLayout());
-        boutons.add(push);  push.addActionListener(null /* null est à remplacer */);
-        boutons.add(add);   add.addActionListener(null /* null est à remplacer */);
-        boutons.add(sub);   sub.addActionListener(null /* null est à remplacer */);
-        boutons.add(mul);   mul.addActionListener(null /* null est à remplacer */);
-        boutons.add(div);   div.addActionListener(null /* null est à remplacer */);
-        boutons.add(clear); clear.addActionListener(null /* null est à remplacer */);
+        boutons.add(push);
+        push.addActionListener(new ButtonListener());
+        boutons.add(add);
+        add.addActionListener(new ButtonListener());
+        boutons.add(sub);
+        sub.addActionListener(new ButtonListener());
+        boutons.add(mul);
+        mul.addActionListener(new ButtonListener());
+        boutons.add(div);
+        div.addActionListener(new ButtonListener());
+        boutons.add(clear);
+        clear.addActionListener(new ButtonListener());
         add(boutons);
         boutons.setBackground(Color.red);
         actualiserInterface();
     }
 
     public void actualiserInterface() {
-        // à compléter
     }
 
     private Integer operande() throws NumberFormatException {
         return Integer.parseInt(donnee.getText());
     }
 
-    // à compléter
-    // en cas d'exception comme division par zéro, 
-    // mauvais format de nombre suite à l'appel de la méthode operande
-    // la pile reste en l'état (intacte)
-
+    class ButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String button = e.getActionCommand();
+            switch(button) {
+                case "push":
+                    try {
+                        pile.empiler(operande());
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Ceci n'est pas une entier!");
+                    } catch (PilePleineException ex) {
+                        System.out.println("La pile est pleine!");
+                    }
+                    break;
+                case "+":
+                    try {
+                        pile.empiler(pile.depiler() + pile.depiler());
+                    } catch (PilePleineException ex) {
+                        System.out.println("La pile est pleine!");
+                    } catch (PileVideException ex) {
+                        System.out.println("La pile est vide!");
+                    }
+                    break;
+                case "-":
+                    try {
+                        pile.empiler(pile.depiler() - pile.depiler());
+                    } catch (PilePleineException ex) {
+                        System.out.println("La pile est pleine!");
+                    } catch (PileVideException ex) {
+                        System.out.println("La pile est vide!");
+                    }
+                    break;
+                case "*":
+                    try {
+                        pile.empiler(pile.depiler() * pile.depiler());
+                    } catch (PilePleineException ex) {
+                        System.out.println("La pile est pleine!");
+                    } catch (PileVideException ex) {
+                        System.out.println("La pile est vide!");
+                    }
+                    break;
+                case "/":
+                    try {
+                        int numerateur = pile.depiler();
+                        int denominateur = pile.depiler();
+                        if (denominateur == 0) {
+                            pile.empiler(denominateur);
+                            pile.empiler(numerateur);
+                            System.out.println("Division par z�ro n'est pas possible!");
+                        } else {
+                            pile.empiler(numerateur / denominateur);
+                        }
+                    } catch (PilePleineException ex) {
+                        System.out.println("La pile est pleine!");
+                    } catch (PileVideException ex) {
+                        System.out.println("La pile est vide!");
+                    }
+                    break;
+                case "[]":
+                    while (!pile.estVide()) {
+                        try {
+                            pile.depiler();
+                        } catch (PileVideException ex) {
+                        }
+                    }
+                    break;
+            }
+        }
+    }
 }
